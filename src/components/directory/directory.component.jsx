@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import './directory.styles.scss';
 
 import MenuItem from '../menu-item/menu-item.component';
