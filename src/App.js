@@ -15,16 +15,9 @@ class App extends Component {
       currentUser: null,
     }
   }
-  // declaration of unsubscribe
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    /**
-     * auth.onAuthStateChanged is subscription will check logged account
-     * every did mount it still logged in until logged out,
-     * even after refresh
-     */
-    // set subscribing
     this.unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
       this.setState({ currentUser: user });
       console.log(user);
@@ -32,18 +25,14 @@ class App extends Component {
   }
 
   componentWillUnmount() {
-    // unsubscribe
     this.unsubscribeFromAuth();
   }
-  
-
-
-  
 
   render() {
+    const { currentUser } = this.state;
     return (
       <div>
-        <Header />
+        <Header currentUser={currentUser} />
         <Routes>
           <Route exact path="/" element={<HomePage />} />
           <Route path="/shop" element={<ShopPage />} />
