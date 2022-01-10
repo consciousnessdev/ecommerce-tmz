@@ -15,13 +15,22 @@ class App extends Component {
       currentUser: null,
     }
   }
+
+  // set default unsubsribe auth to null
   unsubscribeFromAuth = null;
 
   componentDidMount() {
+    // set unsubscribe auth variable from catching auth if changed
+    // watching async userAuth from API User (config) auth
     this.unsubscribeFromAuth = auth.onAuthStateChanged( async (userAuth) => {
+      // if userAuth exist
       if (userAuth) {
+        // then set userRef with create user profile based on user Auth
         const userRef = await createUserProfileDocument(userAuth);
+
+        // when catch snapshot there is changed
         userRef.onSnapshot(snapShot => {
+          // set to state
           this.setState({
             currentUser: {
               id: snapShot.id,
@@ -30,15 +39,18 @@ class App extends Component {
           });
         })
       } else {
+        // set subscribe to current user auth
+        // default value of user auth is null
         this.setState({
           currentUser: userAuth,
-        })
+        });
       }
-
     });
   }
 
   componentWillUnmount() {
+    // set unsubscribe to null
+    // note: return of unsubscireFromAuth is null
     this.unsubscribeFromAuth();
   }
 

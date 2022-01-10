@@ -27,8 +27,13 @@ class SignUp extends Component {
         }
 
         try {
+            // create user with email & password
             const { user } = await auth.createUserWithEmailAndPassword(email, password);
+
+            // create user profile documen by user data and set display name
             await createUserProfileDocument(user, { displayName });
+
+            // set field to empty
             this.setState({
               displayName: '',
               email: '',

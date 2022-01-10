@@ -21,12 +21,15 @@ class SignIn extends Component {
     const { email, password } = this.state;
 
     try {
+      // try sign in with email & password
       await auth.signInWithEmailAndPassword(email, password);
+      // afther that set email & password field to empty string
       this.setState({
         email: '',
         password: '',
       });
     } catch (error) {
+      // show error if user not exist or etc
       console.error(error);
     }
   };
@@ -63,7 +66,10 @@ class SignIn extends Component {
             handleChange={this.handleChange}
           />
           <div className="buttons">
+            {/* firing sign in with registered email & password */}
             <CustomButton type="submit">Sign in</CustomButton>
+            
+            {/* firing to sign in with google account */}
             <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
               {' '}
               Sign in with Google{' '}
