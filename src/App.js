@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { connect } from 'react-redux';
 
 import './App.css';
@@ -9,13 +9,21 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 import Header from './components/header/header.component';
 import { auth, createUserProfileDocument } from './firebase/firebase.util';
 import { setCurrentUser } from './redux/user/user-actions';
+import withRouter from './hoc/withrouter';
 
 class App extends Component {
+
+  constructor() {
+    super();
+    this.state = {
+      isLoading: true
+    };
+  }
 
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const {setCurrentUser} = this.props;
+    const {setCurrentUser, router} = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged( async (userAuth) => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
@@ -27,9 +35,15 @@ class App extends Component {
               ...snapShot.data(),
             }
           });
+          this.setState({ isLoading: false}, () => {
+            router.navigate('/');
+          });
         })
       } else {
         setCurrentUser(userAuth);
+        this.setState({ isLoading: false }, () => {
+          router.navigate('/signin');
+        });
       }
     });
   }
@@ -39,21 +53,46 @@ class App extends Component {
   }
 
   render() {
+    const {currentUser} = this.props;
+    const {isLoading} = this.state;
+    if (isLoading) {
+      return <span>Loading</span>;
+    }
+    
     return (
       <div>
         <Header />
         <Routes>
-          <Route exact path="/" element={<HomePage />} />
+          <Route
+            exact
+            path="/"
+            element={
+              <HomePage />
+            }
+          />
           <Route path="/shop" element={<ShopPage />} />
-          <Route path="/signin" element={<SignInAndSignUpPage />} />
+          <Route
+            path="/signin"
+            element={
+              !currentUser ? (
+                <SignInAndSignUpPage />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
         </Routes>
       </div>
     );
   };
 }
 
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
+
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user)),
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
