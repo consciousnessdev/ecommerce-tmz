@@ -6,6 +6,7 @@ import { auth } from '../../firebase/firebase.util';
 import withRouter from '../../hoc/withrouter';
 
 import CartIcon from '../cart-icon/cart-icon.component';
+import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 
 import React from 'react'
 
@@ -40,6 +41,7 @@ const Header = ({ currentUser, router }) => {
           )}
           <CartIcon />
         </div>
+        <CartDropdown />
       </div>
     );
 };
