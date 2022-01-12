@@ -1,6 +1,7 @@
 import './header.styles.scss';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 import { auth } from '../../firebase/firebase.util';
 import withRouter from '../../hoc/withrouter';
@@ -8,7 +9,8 @@ import withRouter from '../../hoc/withrouter';
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 
-import React from 'react';
+import { selectCartHidden } from '../../redux/cart/cart.selectors';
+import { selectCurrentUser } from '../../redux/user/user.selectors';
 
 const Header = ({ currentUser, router, hidden }) => {
   const redirectAfterLogout = () => {
@@ -45,9 +47,10 @@ const Header = ({ currentUser, router, hidden }) => {
   );
 };
 
-const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
-  currentUser,
-  hidden,
+// select each selector automatically by createStructuredSelector
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+  hidden: selectCartHidden,
 });
 
 export default connect(mapStateToProps)(withRouter(Header));
