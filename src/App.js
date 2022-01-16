@@ -40,7 +40,9 @@ class App extends Component {
             },
           });
           this.setState({ isLoading: false }, () => {
-            router.navigate('/');
+            const { location: {pathname} } = router;
+            const redirectPathname = pathname === '/signin' ? '/' : pathname;
+            router.navigate(redirectPathname);
           });
         });
       } else {
@@ -57,7 +59,6 @@ class App extends Component {
   }
 
   render() {
-    const { currentUser } = this.props;
     const { isLoading } = this.state;
     if (isLoading) {
       return <span>Loading</span>;
@@ -70,16 +71,7 @@ class App extends Component {
           <Route exact path="/" element={<HomePage />} />
           <Route path="/shop" element={<ShopPage />} />
           <Route exact path="/checkout" element={<CheckoutPage />} />
-          <Route
-            path="/signin"
-            element={
-              !currentUser ? (
-                <SignInAndSignUpPage />
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
-          />
+          <Route path="/signin" element={<SignInAndSignUpPage />} />
         </Routes>
       </div>
     );
