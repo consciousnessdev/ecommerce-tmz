@@ -9,6 +9,7 @@ import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import CheckoutPage from './pages/checkout/checkout.component';
+import CollectionPage from './pages/collection/collection.component';
 
 import Header from './components/header/header.component';
 import { auth, createUserProfileDocument } from './firebase/firebase.util';
@@ -69,7 +70,10 @@ class App extends Component {
         <Header />
         <Routes>
           <Route exact path="/" element={<HomePage />} />
-          <Route path="/shop" element={<ShopPage />} />
+          <Route path="shop">
+            <Route index={true} element={<ShopPage />} />
+            <Route path=":collectionId" element={<CollectionPage />} />
+          </Route>
           <Route exact path="/checkout" element={<CheckoutPage />} />
           <Route path="/signin" element={<SignInAndSignUpPage />} />
         </Routes>
