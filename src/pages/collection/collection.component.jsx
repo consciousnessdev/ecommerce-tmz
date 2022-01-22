@@ -1,11 +1,20 @@
 import './collection.styles.scss';
 import withRouter from '../../hoc/withrouter';
+import { connect } from 'react-redux';
 
-const CollectionPage = ({ router }) => {
-  console.log(router.params.collectionId);
-  return <div className='collection-page'>
+import { selectCollection } from '../../redux/shop/shop.selectors';
+
+const CollectionPage = ({ collection }) => {
+  console.log(collection);
+  return (
+    <div className="collection-page">
       <h2>CATEGORY PAGE</h2>
-  </div>;
+    </div>
+  );
 };
 
-export default withRouter(CollectionPage);
+const mapStateToProps = (state, ownProps) => ({
+  collection: selectCollection(ownProps.router.params.collectionId)(state),
+});
+
+export default withRouter(connect(mapStateToProps)(CollectionPage));
