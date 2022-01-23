@@ -17,6 +17,29 @@ import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import withRouter from './hoc/withrouter';
 
+// pt169-171
+/* import { Card } from './card.component';
+import styled from 'styled-components';
+
+import './App.css';
+
+const Text = styled.div`
+  color: red;
+  font-size: 28px;
+  border: ${({ isActive }) =>
+    isActive ? '1px solid black' : '3px dotted green'};
+`;
+
+function App() {
+  return (
+    <div className="App">
+      <Card>
+        <Text isActive={false}>I am a component</Text>
+      </Card>
+    </div>
+  );
+} */
+
 class App extends Component {
   constructor() {
     super();
