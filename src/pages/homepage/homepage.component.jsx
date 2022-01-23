@@ -3,6 +3,8 @@ import {Navigate} from 'react-router-dom';
 
 import './homepage.styles.scss';
 
+import { HomePageContainer } from './homepage.styles';
+
 import Directory from '../../components/directory/directory.component';
 
 const Homepage = ({ currentUser }) => {
@@ -11,9 +13,9 @@ const Homepage = ({ currentUser }) => {
     }
 
     return (
-      <div className="homepage">
+      <HomePageContainer>
         <Directory />
-      </div>
+      </HomePageContainer>
     );
 }
 
