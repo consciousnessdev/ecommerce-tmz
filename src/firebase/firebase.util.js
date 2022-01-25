@@ -1,8 +1,6 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
-
-// firebase api account config
 const config = {
   apiKey: 'AIzaSyC0m7pE20eZQ3bLK4r-TaknRbZT1uwi6jM',
   authDomain: 'crwn-db-517b3.firebaseapp.com',
@@ -13,39 +11,25 @@ const config = {
   measurementId: 'G-ZD8YNY75RR',
 };
 
-/**
- * createUserProfileDocument
- * @param {*} userAuth 
- * @param {*} additionalData 
- * @returns userRef
- * 
- * Function for create profile document within "users" collection,
- * contain displayName, email & createAt
- */
-
 export const createUserProfileDocument = async (userAuth, additionalData) => {
-  // if no userAuth which is firebase config settled then do nothing
   if (!userAuth) return;
 
-  // declare user referenced contains firestore to make users collection based on uid
-  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const userRef = firestore.doc(`users/PAMANLUWE`);
+  console.error(userRef);
 
-  // catch snapshot of user referenced
   const snapShot = await userRef.get();
+  console.error(snapShot.data());
   
-  // if no snapshot user data in users
   if (!snapShot.exists) {
 
-    // declare data from display name & email from userAuth
     const { displayName, email } = userAuth;
 
-    // generate user data created at
     const createdAt = new Date();
     try {
-      // set user referenced with contained data
+      // force to set user ref
       await userRef.set({
-        displayName,
-        email,
+        displayName: 'PAMAN',
+        email: 'paman@majoo.id',
         createdAt,
         ...additionalData
       })
@@ -54,26 +38,13 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     }
   }
 
-  // if snapshot exist then return to existed user referenced
   return userRef;
 }
-
-// initialize config of Firebase
 firebase.initializeApp(config);
-
-// export auth from firebase auth which is referenced to firebase app has settled config
 export const auth = firebase.auth();
-
-// export firestore from firestore
 export const firestore = firebase.firestore();
-
-// set provider from Google Auth Provider
 const provider = new firebase.auth.GoogleAuthProvider();
-
-// set provider to show select account popup
 provider.setCustomParameters({ prompt: 'select_account' });
-
-// function for sign in with google account
 export const signInWithGoogle = () => auth.signInWithPopup(provider);
 
 export default firebase;
