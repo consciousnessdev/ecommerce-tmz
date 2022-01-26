@@ -53,6 +53,9 @@ class App extends Component {
   componentDidMount() {
     const { setCurrentUser, router } = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
+      const {
+        location: { pathname },
+      } = router;
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
 
@@ -63,17 +66,12 @@ class App extends Component {
               ...snapShot.data(),
             },
           });
-          this.setState({ isLoading: false }, () => {
-            const { location: {pathname} } = router;
-            const redirectPathname = pathname === '/signin' ? '/' : pathname;
-            router.navigate(redirectPathname);
-          });
+          const redirectPathname = pathname === '/signin' ? '/' : pathname;
+          this.setState({ isLoading: false }, () => router.navigate(redirectPathname));
         });
       } else {
         setCurrentUser(userAuth);
-        this.setState({ isLoading: false }, () => {
-          router.navigate('/signin');
-        });
+        this.setState({ isLoading: false }, () => router.navigate(pathname));
       }
     });
   }
