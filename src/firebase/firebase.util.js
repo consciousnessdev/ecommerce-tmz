@@ -15,10 +15,10 @@ const config = {
 
 /**
  * createUserProfileDocument
- * @param {*} userAuth 
- * @param {*} additionalData 
+ * @param {*} userAuth
+ * @param {*} additionalData
  * @returns userRef
- * 
+ *
  * Function for create profile document within "users" collection,
  * contain displayName, email & createAt
  */
@@ -30,12 +30,21 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   // declare user referenced contains firestore to make users collection based on uid
   const userRef = firestore.doc(`users/${userAuth.uid}`);
 
+  // declare collection referenced contains firestore collection of users
+  const collectionRef = firestore.collection('users');
+
   // catch snapshot of user referenced
   const snapShot = await userRef.get();
-  
+
+  // declare snapshot for collection
+  const collectionSnapshot = await collectionRef.get();
+
+  // show data of collection snapshot
+  // const collectionSnapshotDoc = collectionSnapshot.docs;
+  // console.log(collectionSnapshotDoc.map(doc => doc.data()));
+
   // if no snapshot user data in users
   if (!snapShot.exists) {
-
     // declare data from display name & email from userAuth
     const { displayName, email } = userAuth;
 
@@ -47,8 +56,8 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         displayName,
         email,
         createdAt,
-        ...additionalData
-      })
+        ...additionalData,
+      });
     } catch (error) {
       console.error('error creating user', error.message);
     }
@@ -56,7 +65,22 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 
   // if snapshot exist then return to existed user referenced
   return userRef;
-}
+};
+
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  const collectionRef = firestore.collection(collectionKey);
+
+  const batch = firestore.batch();
+  objectsToAdd.forEach((obj) => {
+    const newDocRef = collectionRef.doc();
+    batch.set(newDocRef, obj);
+  });
+
+  return await batch.commit();
+};
 
 // initialize config of Firebase
 firebase.initializeApp(config);
