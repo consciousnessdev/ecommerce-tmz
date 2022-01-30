@@ -12,7 +12,10 @@ import CheckoutPage from './pages/checkout/checkout.component';
 import CollectionPage from './pages/collection/collection.component';
 
 import Header from './components/header/header.component';
-import { auth, createUserProfileDocument } from './firebase/firebase.util';
+import {
+  auth,
+  createUserProfileDocument,
+} from './firebase/firebase.util';
 import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import withRouter from './hoc/withrouter';
@@ -51,7 +54,7 @@ class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser, router } = this.props;
+    const { setCurrentUser, router, collectionsArray } = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       const {
         location: { pathname },
@@ -67,12 +70,14 @@ class App extends Component {
             },
           });
           const redirectPathname = pathname === '/signin' ? '/' : pathname;
-          this.setState({ isLoading: false }, () => router.navigate(redirectPathname));
+          this.setState({ isLoading: false }, () =>
+            router.navigate(redirectPathname)
+          );
         });
       } else {
-        setCurrentUser(userAuth);
         this.setState({ isLoading: false }, () => router.navigate(pathname));
       }
+      setCurrentUser(userAuth);
     });
   }
 

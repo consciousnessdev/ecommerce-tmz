@@ -15,10 +15,10 @@ const config = {
 
 /**
  * createUserProfileDocument
- * @param {*} userAuth 
- * @param {*} additionalData 
+ * @param {*} userAuth
+ * @param {*} additionalData
  * @returns userRef
- * 
+ *
  * Function for create profile document within "users" collection,
  * contain displayName, email & createAt
  */
@@ -38,7 +38,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 
   // declare snapshot for collection
   const collectionSnapshot = await collectionRef.get();
-  
+
   // show data of collection snapshot
   // const collectionSnapshotDoc = collectionSnapshot.docs;
   // console.log(collectionSnapshotDoc.map(doc => doc.data()));
@@ -65,7 +65,22 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 
   // if snapshot exist then return to existed user referenced
   return userRef;
-}
+};
+
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  const collectionRef = firestore.collection(collectionKey);
+
+  const batch = firestore.batch();
+  objectsToAdd.forEach((obj) => {
+    const newDocRef = collectionRef.doc();
+    batch.set(newDocRef, obj);
+  });
+
+  return await batch.commit();
+};
 
 // initialize config of Firebase
 firebase.initializeApp(config);
