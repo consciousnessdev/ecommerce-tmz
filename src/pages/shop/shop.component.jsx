@@ -15,20 +15,18 @@ import WithSpinner from '../../components/with-spinner/with-spinner.component';
 const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);
 class ShopPage extends Component {
   state = {
-      loading: true
+    loading: true,
   };
-
-  unsubscribeFromSnapshot = null;
 
   componentDidMount() {
     const { updateCollections } = this.props;
     const collectionRef = firestore.collection('collections');
-    this.unsubscribeFromSnapshot = collectionRef.onSnapshot(async (snapshot) => {
+    collectionRef.get().then((snapshot) => {
       const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
       updateCollections(collectionsMap);
       this.setState({
         loading: false,
-      })
+      });
     });
   }
 
@@ -50,8 +48,9 @@ class ShopPage extends Component {
 //   );
 // };
 
-const mapDispatchTopProps = dispatch => ({
-  updateCollections: collectionsMap => dispatch(updateCollections(collectionsMap))
-})
+const mapDispatchTopProps = (dispatch) => ({
+  updateCollections: (collectionsMap) =>
+    dispatch(updateCollections(collectionsMap)),
+});
 
 export default connect(null, mapDispatchTopProps)(ShopPage);
