@@ -9,7 +9,15 @@ import {
   firestore,
   convertCollectionsSnapshotToMap,
 } from '../../firebase/firebase.util';
+
+import WithSpinner from '../../components/with-spinner/with-spinner.component';
+
+const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);
 class ShopPage extends Component {
+  state = {
+      loading: true
+  };
+
   unsubscribeFromSnapshot = null;
 
   componentDidMount() {
@@ -18,13 +26,17 @@ class ShopPage extends Component {
     this.unsubscribeFromSnapshot = collectionRef.onSnapshot(async (snapshot) => {
       const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
       updateCollections(collectionsMap);
+      this.setState({
+        loading: false,
+      })
     });
   }
 
   render() {
+    const { loading } = this.state;
     return (
       <div className="shop-page">
-        <CollectionsOverview />
+        <CollectionsOverviewWithSpinner isLoading={loading} />
       </div>
     );
   }
