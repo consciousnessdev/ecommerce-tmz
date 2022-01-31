@@ -9,7 +9,8 @@ import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import CheckoutPage from './pages/checkout/checkout.component';
-import CollectionPage from './pages/collection/collection.component';
+// import CollectionPage from './pages/collection/collection.component';
+import CollectionList from './pages/collection/collection-list.component';
 
 import Header from './components/header/header.component';
 import {
@@ -98,7 +99,7 @@ class App extends Component {
           <Route exact path="/" element={<HomePage />} />
           <Route path="shop">
             <Route index={true} element={<ShopPage />} />
-            <Route path=":collectionId" element={<CollectionPage />} />
+            <Route path=":collectionId" element={<CollectionList />} />
           </Route>
           <Route exact path="/checkout" element={<CheckoutPage />} />
           <Route path="/signin" element={<SignInAndSignUpPage />} />
