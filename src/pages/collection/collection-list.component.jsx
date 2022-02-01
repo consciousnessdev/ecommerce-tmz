@@ -1,46 +1,34 @@
 import { Component } from 'react';
+import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import CollectionComponent from './collection.component';
-import {
-  firestore,
-  convertCollectionsSnapshotToMap,
-} from '../../firebase/firebase.util';
 
-import { updateCollections } from '../../redux/shop/shop.actions';
+import CollectionComponent from './collection.component';
+import { fetchCollectionsStartAsync } from '../../redux/shop/shop.actions';
+import { selectIsCollectionFetching } from '../../redux/shop/shop.selectors';
 
 import WithSpinner from '../../components/with-spinner/with-spinner.component';
 
 const CollectionComponentWithSpinner = WithSpinner(CollectionComponent);
 
 class CollectionList extends Component {
-  state = {
-    loading: true,
-  };
 
-  unsubscribeFromSnapshot = null;
   componentDidMount() {
-    const { updateCollections } = this.props;
-    const collectionRef = firestore.collection('collections');
-    this.unsubscribeFromSnapshot = collectionRef.onSnapshot(
-      async (snapshot) => {
-        const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
-        updateCollections(collectionsMap);
-        this.setState({
-          loading: false,
-        });
-      }
-    );
+    const { fetchCollectionsStartAsync } = this.props;
+    fetchCollectionsStartAsync();
   }
 
   render() {
-    const { loading } = this.state;
-    return <CollectionComponentWithSpinner isLoading={loading} />;
+    const { isCollectionFetching } = this.props;
+    return <CollectionComponentWithSpinner isLoading={isCollectionFetching} />;
   }
 }
 
-const mapDispatchTopProps = (dispatch) => ({
-  updateCollections: (collectionsMap) =>
-    dispatch(updateCollections(collectionsMap)),
+const mapStateToProps = createStructuredSelector({
+  isCollectionFetching: selectIsCollectionFetching,
 });
 
-export default connect(null, mapDispatchTopProps)(CollectionList);
+const mapDispatchTopProps = (dispatch) => ({
+  fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync()),
+});
+
+export default connect(mapStateToProps, mapDispatchTopProps)(CollectionList);
