@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import CollectionComponent from './collection.component';
 import { fetchCollectionsStartAsync } from '../../redux/shop/shop.actions';
-import { selectIsCollectionFetching } from '../../redux/shop/shop.selectors';
+import { selectIsCollectionsLoaded } from '../../redux/shop/shop.selectors';
 
 import WithSpinner from '../../components/with-spinner/with-spinner.component';
 
@@ -18,13 +18,13 @@ class CollectionList extends Component {
   }
 
   render() {
-    const { isCollectionFetching } = this.props;
-    return <CollectionComponentWithSpinner isLoading={isCollectionFetching} />;
+    const { isCollectionsLoaded } = this.props;
+    return <CollectionComponentWithSpinner isLoading={!isCollectionsLoaded} />;
   }
 }
 
 const mapStateToProps = createStructuredSelector({
-  isCollectionFetching: selectIsCollectionFetching,
+  isCollectionsLoaded: selectIsCollectionsLoaded,
 });
 
 const mapDispatchTopProps = (dispatch) => ({
