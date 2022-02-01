@@ -55,7 +55,7 @@ class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser, router, collectionsArray } = this.props;
+    const { setCurrentUser, router } = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       const {
         location: { pathname },
