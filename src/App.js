@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -16,10 +16,7 @@ import Header from './components/header/header.component';
 
 import ReactHooks from './pages/reacthooks/reacthooks.component';
 
-import {
-  auth,
-  createUserProfileDocument,
-} from './firebase/firebase.util';
+import { auth, createUserProfileDocument } from './firebase/firebase.util';
 import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import withRouter from './hoc/withrouter';
@@ -47,19 +44,12 @@ function App() {
   );
 } */
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      isLoading: true,
-    };
-  }
+const App = ({ setCurrentUser, router }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const unsubscribeFromAuth = useRef(null);
 
-  unsubscribeFromAuth = null;
-
-  componentDidMount() {
-    const { setCurrentUser, router } = this.props;
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
+  useEffect(() => {
+    unsubscribeFromAuth.current = auth.onAuthStateChanged(async (userAuth) => {
       const {
         location: { pathname },
       } = router;
@@ -74,44 +64,44 @@ class App extends Component {
             },
           });
           const redirectPathname = pathname === '/signin' ? '/' : pathname;
-          this.setState({ isLoading: false }, () =>
-            router.navigate(redirectPathname)
-          );
+          setIsLoading(false);
+          router.navigate(redirectPathname);
         });
       } else {
-        this.setState({ isLoading: false }, () => router.navigate(pathname));
+        setIsLoading(false);
+        router.navigate(pathname);
       }
       setCurrentUser(userAuth);
     });
+  }, [unsubscribeFromAuth, setCurrentUser]);
+
+  useEffect(() => {
+    return () => {
+      unsubscribeFromAuth.current();
+    };
+  }, [unsubscribeFromAuth]);
+  
+
+  if (isLoading) {
+    return <span>Loading</span>;
   }
 
-  componentWillUnmount() {
-    this.unsubscribeFromAuth();
-  }
-
-  render() {
-    const { isLoading } = this.state;
-    if (isLoading) {
-      return <span>Loading</span>;
-    }
-
-    return (
-      <div>
-        <Header />
-        <Routes>
-          <Route exact path="/" element={<HomePage />} />
-          <Route path="shop">
-            <Route index={true} element={<ShopPage />} />
-            <Route path=":collectionId" element={<CollectionList />} />
-          </Route>
-          <Route exact path="/checkout" element={<CheckoutPage />} />
-          <Route path="/signin" element={<SignInAndSignUpPage />} />
-          <Route path="/reacthooks" element={<ReactHooks />} />
-        </Routes>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <Header />
+      <Routes>
+        <Route exact path="/" element={<HomePage />} />
+        <Route path="shop">
+          <Route index={true} element={<ShopPage />} />
+          <Route path=":collectionId" element={<CollectionList />} />
+        </Route>
+        <Route exact path="/checkout" element={<CheckoutPage />} />
+        <Route path="/signin" element={<SignInAndSignUpPage />} />
+        <Route path="/reacthooks" element={<ReactHooks />} />
+      </Routes>
+    </div>
+  );
+};
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
