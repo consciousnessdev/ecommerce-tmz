@@ -1,0 +1,11 @@
+.ReactHooks {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.ReactHooks > .card {
+  margin-top: 25px;
+}
