@@ -13,6 +13,9 @@ import CheckoutPage from './pages/checkout/checkout.component';
 import CollectionList from './pages/collection/collection-list.component';
 
 import Header from './components/header/header.component';
+
+import ReactHooks from './pages/reacthooks/reacthooks.component';
+
 import {
   auth,
   createUserProfileDocument,
@@ -103,6 +106,7 @@ class App extends Component {
           </Route>
           <Route exact path="/checkout" element={<CheckoutPage />} />
           <Route path="/signin" element={<SignInAndSignUpPage />} />
+          <Route path="/reacthooks" element={<ReactHooks />} />
         </Routes>
       </div>
     );
