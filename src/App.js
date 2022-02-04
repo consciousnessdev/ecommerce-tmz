@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -46,10 +46,9 @@ function App() {
 
 const App = ({ setCurrentUser, router }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const unsubscribeFromAuth = useRef(null);
 
   useEffect(() => {
-    unsubscribeFromAuth.current = auth.onAuthStateChanged(async (userAuth) => {
+    const unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       const {
         location: { pathname },
       } = router;
@@ -73,14 +72,10 @@ const App = ({ setCurrentUser, router }) => {
       }
       setCurrentUser(userAuth);
     });
-  }, [unsubscribeFromAuth, setCurrentUser]);
-
-  useEffect(() => {
     return () => {
-      unsubscribeFromAuth.current();
+      unsubscribeFromAuth();
     };
-  }, [unsubscribeFromAuth]);
-  
+  }, [setCurrentUser]);  
 
   if (isLoading) {
     return <span>Loading</span>;
