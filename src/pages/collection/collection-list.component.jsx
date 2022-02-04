@@ -1,20 +1,16 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import { fetchCollectionsStartAsync } from '../../redux/shop/shop.actions';
 import CollectionPageContainer from './collection.container';
 
-class CollectionList extends Component {
-
-  componentDidMount() {
-    const { fetchCollectionsStartAsync } = this.props;
+const CollectionList = ({ fetchCollectionsStartAsync }) => {
+  useEffect(() => {
     fetchCollectionsStartAsync();
-  }
+  }, [fetchCollectionsStartAsync]);
 
-  render() {
-    return <CollectionPageContainer />;
-  }
-}
+  return <CollectionPageContainer />;
+};
 
 const mapDispatchTopProps = (dispatch) => ({
   fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync()),

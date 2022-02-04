@@ -1,23 +1,21 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import CollectionsOverviewContainer from '../../components/collections-overview/collections-overview.container';
 
 import { fetchCollectionsStartAsync } from '../../redux/shop/shop.actions';
-class ShopPage extends Component {
-  componentDidMount() {
-    const { fetchCollectionsStartAsync } = this.props;
-    fetchCollectionsStartAsync();
-  }
 
-  render() {
-    return (
-      <div className="shop-page">
-        <CollectionsOverviewContainer />
-      </div>
-    );
-  }
-}
+const ShopPage = ({ fetchCollectionsStartAsync }) => {
+  useEffect(() => {
+    fetchCollectionsStartAsync();
+  }, [fetchCollectionsStartAsync]);
+
+  return (
+    <div className="shop-page">
+      <CollectionsOverviewContainer />
+    </div>
+  );
+};
 
 const mapDispatchTopProps = (dispatch) => ({
   fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync()),
