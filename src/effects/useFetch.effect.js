@@ -10,7 +10,9 @@ const useFetch = (url) => {
         setData(dataArray[0]);
       };
       fetchData();
-    }, []);
+      //  below means fetchData will run only url value has change
+      // }, [url]);
+    });
 
     return data;
 }
