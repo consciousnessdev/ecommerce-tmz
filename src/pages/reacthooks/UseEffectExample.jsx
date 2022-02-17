@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Card from './components/card.component';
+import Card from './components/card/card.component';
 
 const UseStateExample = () => {
   const [user, setUser] = useState(null);
