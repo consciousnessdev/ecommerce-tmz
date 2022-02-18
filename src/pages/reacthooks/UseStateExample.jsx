@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './ReactHooks.css';
 import Card from './components/card/card.component';
 
 /**
@@ -28,12 +29,14 @@ const UseStateExample = () => {
    */
 
   return (
-    <Card>
-      <h1> {name} </h1>
-      <h1> {address} </h1>
-      <button onClick={() => setName('Andrei')}>Set Name to Andrei</button>
-      <button onClick={() => setAddress('Paiton')}>Set Address</button>
-    </Card>
+    <div className="ReactHooks">
+      <Card>
+        <h1> {name} </h1>
+        <h1> {address} </h1>
+        <button onClick={() => setName('Andrei')}>Set Name to Andrei</button>
+        <button onClick={() => setAddress('Paiton')}>Set Address</button>
+      </Card>
+    </div>
   );
 };
 

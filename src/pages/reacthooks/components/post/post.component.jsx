@@ -15,7 +15,7 @@ const Post = ({ postId }) => {
           <h3>{post.body}</h3>
         </div>
       ) : (
-        <p>User Not Found</p>
+        <p>Post Not Found</p>
       )}
     </Card>
   );

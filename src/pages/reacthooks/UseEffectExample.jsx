@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import './ReactHooks.css';
 import Card from './components/card/card.component';
 
 const UseEffectExample = () => {
@@ -26,24 +27,24 @@ const UseEffectExample = () => {
   
 
   return (
-    <Card>
-      <input
-        type="search"
-        value={searchQuery}
-        onChange={event => setSearchQuery(event.target.value)}
-      />
-      {
-          user ? (
-              <div>
-                  <h3>{user.name}</h3>
-                  <h3>{user.username}</h3>
-                  <h3>{user.email}</h3>
-              </div>
-          ) : (
-              <p>No user found</p>
-          )
-      }
-    </Card>
+    <div className="ReactHooks">
+      <Card>
+        <input
+          type="search"
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
+        />
+        {user ? (
+          <div>
+            <h3>{user.name}</h3>
+            <h3>{user.username}</h3>
+            <h3>{user.email}</h3>
+          </div>
+        ) : (
+          <p>No user found</p>
+        )}
+      </Card>
+    </div>
   );
 };
 
