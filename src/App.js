@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { connect, useSelector, useDispatch } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
+import { useDispatch } from 'react-redux';
 
 import './App.css';
 
@@ -9,7 +8,6 @@ import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import CheckoutPage from './pages/checkout/checkout.component';
-// import CollectionPage from './pages/collection/collection.component';
 import CollectionList from './pages/collection/collection-list.component';
 
 import Header from './components/header/header.component';
@@ -21,46 +19,22 @@ import UseReducerExample from './pages/reacthooks/UseReducerExample';
 
 import { auth, createUserProfileDocument } from './firebase/firebase.util';
 import { setCurrentUser } from './redux/user/user.actions';
-import { selectCurrentUser } from './redux/user/user.selectors';
+// import { selectCurrentUser } from './redux/user/user.selectors';
 import withRouter from './hoc/withrouter';
 
-// pt169-171
-/* import { Card } from './card.component';
-import styled from 'styled-components';
-
-import './App.css';
-
-const Text = styled.div`
-  color: red;
-  font-size: 28px;
-  border: ${({ isActive }) =>
-    isActive ? '1px solid black' : '3px dotted green'};
-`;
-
-function App() {
-  return (
-    <div className="App">
-      <Card>
-        <Text isActive={false}>I am a component</Text>
-      </Card>
-    </div>
-  );
-} */
-
-const App = ({ setCurrentUser, router }) => {
+const App = ({ router }) => {
   const [isLoading, setIsLoading] = useState(true);
+  // commented caused by passing some previous course video about saga
+  // then currentUser variable is unused
+  // const currentUser = useSelector(selectCurrentUser);
 
-  // useSelecter its like mapStateToProps mapping when used connect method
+  // useDispatch make dispatch available inside component
+  const dispatch = useDispatch()
 
-  // useSelector will run when reselect selector (in this case selectCurrentUser),
-  // got new value
-  const currentUser = useSelector(selectCurrentUser);
-  console.error(currentUser);
-
-  // if use anonymous function and not use reselect selector, it will run even value
-  // not change
-  const isHidden = useSelector((state) => state.cart.hidden);
-  console.error(isHidden);
+  // if you make function like below, it means always create new instance
+  // every component has render, so it will makes rerender over and over
+  // note: check useEffect array dependecy
+  // const func = () => {};
 
   useEffect(() => {
     const unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
@@ -71,12 +45,14 @@ const App = ({ setCurrentUser, router }) => {
         const userRef = await createUserProfileDocument(userAuth);
 
         userRef.onSnapshot((snapShot) => {
-          setCurrentUser({
-            currentUser: {
-              id: snapShot.id,
-              ...snapShot.data(),
-            },
-          });
+          dispatch(
+            setCurrentUser({
+              currentUser: {
+                id: snapShot.id,
+                ...snapShot.data(),
+              },
+            })
+          );
           const redirectPathname = pathname === '/signin' ? '/' : pathname;
           setIsLoading(false);
           router.navigate(redirectPathname);
@@ -85,12 +61,15 @@ const App = ({ setCurrentUser, router }) => {
         setIsLoading(false);
         router.navigate(pathname);
       }
-      setCurrentUser(userAuth);
+      dispatch(setCurrentUser(userAuth));
     });
     return () => {
       unsubscribeFromAuth();
     };
-  }, [setCurrentUser]);
+    // it will makes rerender over and over, because useEffect
+    // watch func it difference instance every it's declaration
+    // }, [dispatch, func]);
+  }, [dispatch]);
 
   if (isLoading) {
     return <span>Loading</span>;
@@ -118,13 +97,4 @@ const App = ({ setCurrentUser, router }) => {
   );
 };
 
-// disabled for useSelector trying
-// const mapStateToProps = createStructuredSelector({
-//   currentUser: selectCurrentUser,
-// });
-
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-});
-
-export default connect(null, mapDispatchToProps)(withRouter(App));
+export default withRouter(App);
