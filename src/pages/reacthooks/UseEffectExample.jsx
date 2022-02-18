@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Card from './components/card/card.component';
 
-const UseStateExample = () => {
+const UseEffectExample = () => {
   const [user, setUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -47,4 +47,4 @@ const UseStateExample = () => {
   );
 };
 
-export default UseStateExample;
+export default UseEffectExample;
