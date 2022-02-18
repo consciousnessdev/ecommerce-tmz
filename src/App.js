@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import './App.css';
@@ -50,6 +50,18 @@ function App() {
 const App = ({ setCurrentUser, router }) => {
   const [isLoading, setIsLoading] = useState(true);
 
+  // useSelecter its like mapStateToProps mapping when used connect method
+
+  // useSelector will run when reselect selector (in this case selectCurrentUser),
+  // got new value
+  const currentUser = useSelector(selectCurrentUser);
+  console.error(currentUser);
+
+  // if use anonymous function and not use reselect selector, it will run even value
+  // not change
+  const isHidden = useSelector((state) => state.cart.hidden);
+  console.error(isHidden);
+
   useEffect(() => {
     const unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       const {
@@ -78,7 +90,7 @@ const App = ({ setCurrentUser, router }) => {
     return () => {
       unsubscribeFromAuth();
     };
-  }, [setCurrentUser]);  
+  }, [setCurrentUser]);
 
   if (isLoading) {
     return <span>Loading</span>;
@@ -106,12 +118,13 @@ const App = ({ setCurrentUser, router }) => {
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser,
-});
+// disabled for useSelector trying
+// const mapStateToProps = createStructuredSelector({
+//   currentUser: selectCurrentUser,
+// });
 
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
+export default connect(null, mapDispatchToProps)(withRouter(App));
