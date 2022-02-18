@@ -15,6 +15,9 @@ import CollectionList from './pages/collection/collection-list.component';
 import Header from './components/header/header.component';
 
 import ReactHooks from './pages/reacthooks/reacthooks.component';
+import UseStateExample from './pages/reacthooks/UseStateExample';
+import UseEffectExample from './pages/reacthooks/UseEffectExample';
+import UseReducerExample from './pages/reacthooks/UseReducerExample';
 
 import { auth, createUserProfileDocument } from './firebase/firebase.util';
 import { setCurrentUser } from './redux/user/user.actions';
@@ -92,7 +95,12 @@ const App = ({ setCurrentUser, router }) => {
         </Route>
         <Route exact path="/checkout" element={<CheckoutPage />} />
         <Route path="/signin" element={<SignInAndSignUpPage />} />
-        <Route path="/reacthooks" element={<ReactHooks />} />
+        <Route path="/reacthooks">
+          <Route index={true} element={<ReactHooks />} />
+          <Route path="usestate" element={<UseStateExample />} />
+          <Route path="useeffect" element={<UseEffectExample />} />
+          <Route path="usereducer" element={<UseReducerExample />} />
+        </Route>
       </Routes>
     </div>
   );
