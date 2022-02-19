@@ -6,17 +6,16 @@ import CollectionItem from '../../components/collection-item/collection-item.com
 import { selectCollection } from '../../redux/shop/shop.selectors';
 
 const CollectionPage = () => {
-  const params = useParams();
-  const { collectionId } = params;
+  const { collectionId } = useParams();
   const collection = useSelector(selectCollection(collectionId));
-  const { title, items } = collection; 
+  const { title, items } = collection;
   return (
     <div className="collection-page">
       <h2 className="title">{title}</h2>
       <div className="items">
-        {
-          items.map(item => <CollectionItem key={item.id} item={item} />)
-        }
+        {items.map((item) => (
+          <CollectionItem key={item.id} item={item} />
+        ))}
       </div>
     </div>
   );
