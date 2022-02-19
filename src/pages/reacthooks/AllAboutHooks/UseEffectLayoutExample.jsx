@@ -1,0 +1,24 @@
+import { useLayoutEffect, useEffect, useRef } from 'react';
+
+import './useEffectLayoutStyles.css';
+
+const UseLayoutEffectExample = () => {
+  const ourDiv = useRef();
+
+  useEffect(() => {
+    console.log('useEffect');
+  }, [ourDiv]);
+
+  useLayoutEffect(() => {
+    console.log('useLayoutEffect');
+    ourDiv.current.style.backgroundColor = 'red';
+  }, [ourDiv]);
+
+  return (
+    <div id="my-div" ref={ourDiv}>
+      useLayoutEffect vs useEffect
+    </div>
+  );
+};
+
+export default UseLayoutEffectExample;
