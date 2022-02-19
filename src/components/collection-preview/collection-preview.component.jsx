@@ -1,21 +1,29 @@
-import './collection-preview.styles.scss';
+import { useNavigate, useLocation } from 'react-router-dom';
 import CollectionItem from '../collection-item/collection-item.component';
 
-const CollectionPreview = ({ title, items }) => {
-    return (
-        <div className="collection-preview">
-            <h1 className="title">{title.toUpperCase()}</h1>
-            <div className="preview">
-                {
-                    items
-                        .filter((item, idx) => idx < 4)
-                        .map(item => (
-                            <CollectionItem key={item.id} item={item} />
-                        ))
-                }
-            </div>
-        </div>
-    )
-}
+import {
+  CollectionPreviewContainer,
+  TitleContainer,
+  PreviewContainer,
+} from './collection-preview.styles';
 
-export default CollectionPreview
+const CollectionPreview = ({ title, items, routeName }) => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  return (
+    <CollectionPreviewContainer>
+      <TitleContainer onClick={() => navigate(`${pathname}/${routeName}`)}>
+        {title.toUpperCase()}
+      </TitleContainer>
+      <PreviewContainer>
+        {items
+          .filter((item, idx) => idx < 4)
+          .map((item) => (
+            <CollectionItem key={item.id} item={item} />
+          ))}
+      </PreviewContainer>
+    </CollectionPreviewContainer>
+  );
+};
+
+export default CollectionPreview;
