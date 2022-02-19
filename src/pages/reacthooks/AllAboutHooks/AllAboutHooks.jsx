@@ -6,10 +6,10 @@ import UseEffectLayoutExample from './UseEffectLayoutExample';
 const AllAboutHooks = () => {
   return (
     <div className="App">
-      {/* <UseStateExample1 /> */}
-      <UseStateExample2 />
-      {/* <UseEffectExample />
-      <UseEffectLayoutExample /> */}
+      {/* <UseStateExample1 />
+      <UseStateExample2 /> */}
+      <UseEffectExample />
+      {/* <UseEffectLayoutExample /> */}
     </div>
   );
 };
