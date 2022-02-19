@@ -17,6 +17,8 @@ import UseStateExample from './pages/reacthooks/UseStateExample';
 import UseEffectExample from './pages/reacthooks/UseEffectExample';
 import UseReducerExample from './pages/reacthooks/UseReducerExample';
 
+import AllAboutHooksPage from './pages/reacthooks/AllAboutHooks/AllAboutHooks';
+
 import { auth, createUserProfileDocument } from './firebase/firebase.util';
 import { setCurrentUser } from './redux/user/user.actions';
 // import { selectCurrentUser } from './redux/user/user.selectors';
@@ -91,6 +93,7 @@ const App = ({ router }) => {
           <Route path="usestate" element={<UseStateExample />} />
           <Route path="useeffect" element={<UseEffectExample />} />
           <Route path="usereducer" element={<UseReducerExample />} />
+          <Route path="all" element={<AllAboutHooksPage />} />
         </Route>
       </Routes>
     </div>
