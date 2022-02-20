@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
 // const consoleMessage = () => {
 //   console.log('effect run');
@@ -44,8 +44,8 @@ const UseEffectExample = () => {
     //   myFunc();
     // }, [test1]);
 
-    const [test1, setTest1] = useState(true);
-    const [test2, setTest2] = useState(true);
+    // const [test1, setTest1] = useState(true);
+    // const [test2, setTest2] = useState(true);
 
     // const myFunc = () => {
     //   console.log('effect of ' + test1);
@@ -70,20 +70,49 @@ const UseEffectExample = () => {
       as second Argument
     */
 
-    const myFunc = useCallback(() => {
-      //  otherwise useCallback will tell react for myFunc had initialize
-      //  except value of dependency array has updated(test1)
-      console.log('effect of ' + test1);
-      // this dependency array means: every test 1 has change,
-      // re-iniliaze myFunc instance & update it definition
-    }, [test1]);
+    // const myFunc = useCallback(() => {
+    //   //  otherwise useCallback will tell react for myFunc had initialize
+    //   //  except value of dependency array has updated(test1)
+    //   console.log('effect of ' + test1);
+    //   // this dependency array means: every test 1 has change,
+    //   // re-iniliaze myFunc instance & update it definition
+    // }, [test1]);
+
+    // useEffect(() => {
+    //   myFunc();
+    //   // myFunc as dependency array, it runs depend on useCallback above,
+    //   // then useCallback dependency array is test1 value's switching
+    // }, [myFunc]);
+
+    /*
+      useMemo: if useCallback memoize function, useMemo memoize object
+    */
+
+    const [test1, setTest1] = useState(true);
+    const [test2, setTest2] = useState(true);
+
+    // const myObj = {
+    //   a: 'my value of a ' + test1
+    // }
+
+    // useEffect(() => {
+    //   // it same like function previously, as program flow every render, it will
+    //   // run from top to bottom, and definition of object will re-inialize
+    //   // so object need to memoize, then useEffect run when myObj has changed
+    //   console.log(myObj.a);
+    // }, []);
+
+
+    const myObj = useMemo(() => ({
+      a: 'my value of a ' + test1,
+      // dependency array of use memo make trigger of useEffect below,
+      // so when test1 has changed, useEffect will triggered
+    }), [test1]);
 
     useEffect(() => {
-      myFunc();
-      // myFunc as dependency array, it runs depend on useCallback above,
-      // then useCallback dependency array is test1 value's switching
-    }, [myFunc]);
-
+      console.log(myObj.a);
+      // myObject as dependency array of useEffect
+    }, [myObj]);
 
   return (
     <div>
