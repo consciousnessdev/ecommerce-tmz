@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 // const consoleMessage = () => {
 //   console.log('effect run');
@@ -32,17 +32,58 @@ const UseEffectExample = () => {
     //   consoleMessage('second');
     // }, []);
 
+    // const [test1, setTest1] = useState(true);
+    // const [test2, setTest2] = useState(true);
+
+    // // make function definition inside useEffect run if only dependency array of
+    // // data state change
+    // useEffect(() => {
+    //   const myFunc = () => {
+    //     console.log('effect of '+test1);
+    //   }
+    //   myFunc();
+    // }, [test1]);
+
     const [test1, setTest1] = useState(true);
     const [test2, setTest2] = useState(true);
 
-    // make function definition inside useEffect run if only dependency array of
-    // data state change
-    useEffect(() => {
-      const myFunc = () => {
-        console.log('effect of '+test1);
-      }
-      myFunc();
+    // const myFunc = () => {
+    //   console.log('effect of ' + test1);
+    // };
+
+    // useEffect(() => {
+    //   myFunc();
+    //   // dependency array set to test1, so it expected myFunc run when test1 value
+    //   // had changed, but when adding myFunc in to dependency array, if other value
+    //   // had changed, myFunc fired too, because programs runs from top to bottom as
+    //   // usual, and function will be initialized as new instance, so exclude myFunc
+    //   // from dependency array
+    //   // }, [test1, myFunc]);
+    //   // sometime this code give warning caused by react don't know what myFunc doing
+    //   // because no myFunc in dependency array, so solved by use useCallback below
+    // }, [test1]);
+
+    /*
+      useCallback: takes some callback, and give back memoize version of function,
+      it means store that function make sure persist throught out re-render, and
+      only time give of new function / re-iniliaze based on array dependency passed
+      as second Argument
+    */
+
+    const myFunc = useCallback(() => {
+      //  otherwise useCallback will tell react for myFunc had initialize
+      //  except value of dependency array has updated(test1)
+      console.log('effect of ' + test1);
+      // this dependency array means: every test 1 has change,
+      // re-iniliaze myFunc instance & update it definition
     }, [test1]);
+
+    useEffect(() => {
+      myFunc();
+      // myFunc as dependency array, it runs depend on useCallback above,
+      // then useCallback dependency array is test1 value's switching
+    }, [myFunc]);
+
 
   return (
     <div>
