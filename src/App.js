@@ -1,31 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-
-import HomePage from './pages/homepage/homepage.component';
-import ShopPage from './pages/shop/shop.component';
-import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
-import CheckoutPage from './pages/checkout/checkout.component';
-import CollectionList from './pages/collection/collection-list.component';
 
 import { GlobalStyle } from './global.styles';
 
 import Header from './components/header/header.component';
-
-import ReactHooks from './pages/reacthooks/reacthooks.component';
-import UseStateExample from './pages/reacthooks/UseStateExample';
-import UseEffectExample from './pages/reacthooks/UseEffectExample';
-import UseReducerExample from './pages/reacthooks/UseReducerExample';
-
-import AllAboutHooksPage from './pages/reacthooks/AllAboutHooks/AllAboutHooks';
+import Spinner from './components/spinner/spinner.component';
 
 import { auth, createUserProfileDocument } from './firebase/firebase.util';
 import { setCurrentUser } from './redux/user/user.actions';
 // import { selectCurrentUser } from './redux/user/user.selectors';
 import withRouter from './hoc/withrouter';
 
+const HomePage = lazy(() => import('./pages/homepage/homepage.component'));
+const ShopPage = lazy(() => import('./pages/shop/shop.component'));
+const SignInAndSignUpPage = lazy(() => import('./pages/sign-in-and-sign-up/sign-in-and-sign-up.component'));
+const CheckoutPage = lazy(() => import('./pages/checkout/checkout.component'));
+const CollectionList = lazy(() => import('./pages/collection/collection-list.component'));
+
+const ReactHooks = lazy(() => import('./pages/reacthooks/reacthooks.component'));
+const UseStateExample = lazy(() => import('./pages/reacthooks/UseStateExample'));
+const UseEffectExample = lazy(() => import('./pages/reacthooks/UseEffectExample'));
+const UseReducerExample = lazy(() => import('./pages/reacthooks/UseReducerExample'));
+const AllAboutHooksPage = lazy(() => import('./pages/reacthooks/AllAboutHooks/AllAboutHooks'));
+
 const App = ({ router }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   // commented caused by passing some previous course video about saga
   // then currentUser variable is unused
   // const currentUser = useSelector(selectCurrentUser);
@@ -56,11 +56,11 @@ const App = ({ router }) => {
             })
           );
           const redirectPathname = pathname === '/signin' ? '/' : pathname;
-          setIsLoading(false);
+          // setIsLoading(false);
           router.navigate(redirectPathname);
         });
       } else {
-        setIsLoading(false);
+        // setIsLoading(false);
         router.navigate(pathname);
       }
       dispatch(setCurrentUser(userAuth));
@@ -73,30 +73,33 @@ const App = ({ router }) => {
     // }, [dispatch, func]);
   }, [dispatch]);
 
-  if (isLoading) {
-    return <span>Loading</span>;
-  }
+  // changed with suspense
+  // if (isLoading) {
+  //   return <span>Loading</span>;
+  // }
 
   return (
     <div>
       <GlobalStyle />
       <Header />
-      <Routes>
-        <Route exact path="/" element={<HomePage />} />
-        <Route path="shop">
-          <Route index={true} element={<ShopPage />} />
-          <Route path=":collectionId" element={<CollectionList />} />
-        </Route>
-        <Route exact path="/checkout" element={<CheckoutPage />} />
-        <Route path="/signin" element={<SignInAndSignUpPage />} />
-        <Route path="/reacthooks">
-          <Route index={true} element={<ReactHooks />} />
-          <Route path="usestate" element={<UseStateExample />} />
-          <Route path="useeffect" element={<UseEffectExample />} />
-          <Route path="usereducer" element={<UseReducerExample />} />
-          <Route path="all" element={<AllAboutHooksPage />} />
-        </Route>
-      </Routes>
+      <Suspense fallback={<Spinner />}>
+        <Routes>
+          <Route exact path="/" element={<HomePage />} />
+          <Route path="shop">
+            <Route index={true} element={<ShopPage />} />
+            <Route path=":collectionId" element={<CollectionList />} />
+          </Route>
+          <Route exact path="/checkout" element={<CheckoutPage />} />
+          <Route path="/signin" element={<SignInAndSignUpPage />} />
+          <Route path="/reacthooks">
+            <Route index={true} element={<ReactHooks />} />
+            <Route path="usestate" element={<UseStateExample />} />
+            <Route path="useeffect" element={<UseEffectExample />} />
+            <Route path="usereducer" element={<UseReducerExample />} />
+            <Route path="all" element={<AllAboutHooksPage />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </div>
   );
 };

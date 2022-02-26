@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import CollectionsOverviewContainer from '../../components/collections-overview/collections-overview.container';
+import CollectionOverView from '../../components/collections-overview/collections-overview.component';
 
 import { fetchCollectionsStartAsync } from '../../redux/shop/shop.actions';
 
@@ -12,7 +12,7 @@ const ShopPage = ({ fetchCollectionsStartAsync }) => {
 
   return (
     <div className="shop-page">
-      <CollectionsOverviewContainer />
+      <CollectionOverView />
     </div>
   );
 };
