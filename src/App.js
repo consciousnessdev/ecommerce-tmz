@@ -24,6 +24,7 @@ const UseStateExample = lazy(() => import('./pages/reacthooks/UseStateExample'))
 const UseEffectExample = lazy(() => import('./pages/reacthooks/UseEffectExample'));
 const UseReducerExample = lazy(() => import('./pages/reacthooks/UseReducerExample'));
 const AllAboutHooksPage = lazy(() => import('./pages/reacthooks/AllAboutHooks/AllAboutHooks'));
+const UseCallBackPage = lazy(() => import('./pages/reacthooks/UseCallback'));
 
 const App = ({ router }) => {
   // const [isLoading, setIsLoading] = useState(true);
@@ -99,6 +100,7 @@ const App = ({ router }) => {
               <Route path="useeffect" element={<UseEffectExample />} />
               <Route path="usereducer" element={<UseReducerExample />} />
               <Route path="all" element={<AllAboutHooksPage />} />
+              <Route path="usecallback" element={<UseCallBackPage />} />
             </Route>
           </Routes>
         </Suspense>
