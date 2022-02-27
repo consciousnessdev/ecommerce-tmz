@@ -6,6 +6,7 @@ import { GlobalStyle } from './global.styles';
 
 import Header from './components/header/header.component';
 import Spinner from './components/spinner/spinner.component';
+import ErrorBoundary from './components/error-boundary/error-boundary.component';
 
 import { auth, createUserProfileDocument } from './firebase/firebase.util';
 import { setCurrentUser } from './redux/user/user.actions';
@@ -82,24 +83,26 @@ const App = ({ router }) => {
     <div>
       <GlobalStyle />
       <Header />
-      <Suspense fallback={<Spinner />}>
-        <Routes>
-          <Route exact path="/" element={<HomePage />} />
-          <Route path="shop">
-            <Route index={true} element={<ShopPage />} />
-            <Route path=":collectionId" element={<CollectionList />} />
-          </Route>
-          <Route exact path="/checkout" element={<CheckoutPage />} />
-          <Route path="/signin" element={<SignInAndSignUpPage />} />
-          <Route path="/reacthooks">
-            <Route index={true} element={<ReactHooks />} />
-            <Route path="usestate" element={<UseStateExample />} />
-            <Route path="useeffect" element={<UseEffectExample />} />
-            <Route path="usereducer" element={<UseReducerExample />} />
-            <Route path="all" element={<AllAboutHooksPage />} />
-          </Route>
-        </Routes>
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={<Spinner />}>
+          <Routes>
+            <Route exact path="/" element={<HomePage />} />
+            <Route path="shop">
+              <Route index={true} element={<ShopPage />} />
+              <Route path=":collectionId" element={<CollectionList />} />
+            </Route>
+            <Route exact path="/checkout" element={<CheckoutPage />} />
+            <Route path="/signin" element={<SignInAndSignUpPage />} />
+            <Route path="/reacthooks">
+              <Route index={true} element={<ReactHooks />} />
+              <Route path="usestate" element={<UseStateExample />} />
+              <Route path="useeffect" element={<UseEffectExample />} />
+              <Route path="usereducer" element={<UseReducerExample />} />
+              <Route path="all" element={<AllAboutHooksPage />} />
+            </Route>
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 };
