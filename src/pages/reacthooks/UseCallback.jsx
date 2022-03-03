@@ -19,12 +19,11 @@ const UseCallBackApp = () => {
     return (
       <div className="ReactHooks">
         <header className="App-header">
-          {/* <img src={logo} className="App-logo" alt="logo" /> */}
-          Count1: {count1}
+          <div>Count1: {count1}</div>
           <button onClick={incrementCount1}>Increase Count1</button>
-          Count2: {count2}
+          <div>Count2: {count2}</div>
           <button onClick={incrementCount2}>Increase Count2</button>
-          {/* complexValue: {doSomethingComplicated} */}
+          <button onClick={logName}>Logname</button>
         </header>
       </div>
     );
