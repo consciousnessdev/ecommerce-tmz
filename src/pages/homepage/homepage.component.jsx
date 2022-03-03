@@ -1,3 +1,5 @@
+import { Profiler } from 'react';
+
 import './homepage.styles.scss';
 
 import { HomePageContainer } from './homepage.styles';
@@ -9,7 +11,20 @@ const Homepage = () => {
   // throw Error;
   return (
     <HomePageContainer>
-      <Directory />
+      {/* Profiler will check id, phase & actualDuration */}
+      {/* Documentation: https://reactjs.org/docs/profiler.html#onrender-callback */}
+      <Profiler
+        id="Directory"
+        onRender={(id, phase, actualDuration) => {
+          console.log({
+            id,
+            phase,
+            actualDuration,
+          });
+        }}
+      >
+        <Directory />
+      </Profiler>
     </HomePageContainer>
   );
 };
