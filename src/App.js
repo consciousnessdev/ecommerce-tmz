@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -25,6 +25,7 @@ const UseEffectExample = lazy(() => import('./pages/reacthooks/UseEffectExample'
 const UseReducerExample = lazy(() => import('./pages/reacthooks/UseReducerExample'));
 const AllAboutHooksPage = lazy(() => import('./pages/reacthooks/AllAboutHooks/AllAboutHooks'));
 const UseCallBackPage = lazy(() => import('./pages/reacthooks/UseCallback'));
+const UseMemoPage = lazy(() => import('./pages/reacthooks/UseMemo'));
 
 const App = ({ router }) => {
   // const [isLoading, setIsLoading] = useState(true);
@@ -101,6 +102,7 @@ const App = ({ router }) => {
               <Route path="usereducer" element={<UseReducerExample />} />
               <Route path="all" element={<AllAboutHooksPage />} />
               <Route path="usecallback" element={<UseCallBackPage />} />
+              <Route path="usememo" element={<UseMemoPage />} />
             </Route>
           </Routes>
         </Suspense>
